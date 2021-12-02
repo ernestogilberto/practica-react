@@ -1,23 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect, useState} from 'react';
+import getPeople from './utils/fetchData';
+import People from './components/People';
+import Counter from './components/Counter';
 
 function App() {
+
+  const [people, setPeople] = useState([]);
+  const [id, setId] = useState(1);
+
+
+  useEffect(() => {
+    getPeople(id).then(r => setPeople(r));
+  }, [id])
+
+  const addId = () => {
+    setId(id + 1);
+  }
+
+  const reduceId = () => {
+    id > 1 && setId(id - 1);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>People Star Wars</h1>
+      <Counter id={id} addId={addId} reduceId={reduceId}/>
+      <People {...people}/>
     </div>
   );
 }
